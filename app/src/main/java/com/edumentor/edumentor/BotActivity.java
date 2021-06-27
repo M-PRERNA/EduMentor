@@ -49,6 +49,7 @@ public class BotActivity extends AppCompatActivity implements BotReply {
         setContentView(R.layout.activity_bot);
         chatView = findViewById(R.id.chatView);
         editMessage = findViewById(R.id.editMessage);
+        btnSend=findViewById(R.id.btnSend);
 
 
 

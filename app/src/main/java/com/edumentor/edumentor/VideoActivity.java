@@ -81,7 +81,7 @@ public class VideoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_video);
 
         if (checkSelfPermission(REQUESTED_PERMISSIONS[0], PERMISSION_REQ_ID) &&
                 checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID)) {
@@ -105,7 +105,12 @@ public class VideoActivity extends AppCompatActivity {
     }
 
     private void setupSession() {
-        mRtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION);
+        try {
+            mRtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION);
+
+        }catch (NullPointerException ignored){
+
+        }
 
         mRtcEngine.enableVideo();
 
@@ -121,7 +126,11 @@ public class VideoActivity extends AppCompatActivity {
         SurfaceView videoSurface = RtcEngine.CreateRendererView(getBaseContext());
         videoSurface.setZOrderMediaOverlay(true);
         videoContainer.addView(videoSurface);
-        mRtcEngine.setupLocalVideo(new VideoCanvas(videoSurface, VideoCanvas.RENDER_MODE_FIT, 0));
+        try {
+            mRtcEngine.setupLocalVideo(new VideoCanvas(videoSurface, VideoCanvas.RENDER_MODE_FIT, 0));
+        }catch (NullPointerException ignored){
+
+        }
     }
 
     private void setupRemoteVideoStream(int uid) {
@@ -148,8 +157,11 @@ public class VideoActivity extends AppCompatActivity {
             btn.setSelected(true);
             btn.setImageResource(R.drawable.audio_toggle_active_btn);
         }
+        try{
+            mRtcEngine.muteLocalAudioStream(btn.isSelected());}
+        catch (NullPointerException ignored){
 
-        mRtcEngine.muteLocalAudioStream(btn.isSelected());
+        }
     }
 
     public void onVideoMuteClicked(View view) {
@@ -161,8 +173,11 @@ public class VideoActivity extends AppCompatActivity {
             btn.setSelected(true);
             btn.setImageResource(R.drawable.video_toggle_active_btn);
         }
+        try {
+            mRtcEngine.muteLocalVideoStream(btn.isSelected());
+        }catch(NullPointerException ignored){
 
-        mRtcEngine.muteLocalVideoStream(btn.isSelected());
+        }
 
         FrameLayout container = findViewById(R.id.floating_video_container);
         container.setVisibility(btn.isSelected() ? View.GONE : View.VISIBLE);
@@ -173,7 +188,11 @@ public class VideoActivity extends AppCompatActivity {
 
     // join the channel when user clicks UI button
     public void onjoinChannelClicked(View view) {
-        mRtcEngine.joinChannel(null, "test-channel", "Extra Optional Data", 0); // if you do not specify the uid, Agora will assign one.
+        try {
+            mRtcEngine.joinChannel(null, "test-channel", "Extra Optional Data", 0);
+        }catch(NullPointerException ignored){
+            // if you do not specify the uid, Agora will assign one.
+        }
         setupLocalVideoFeed();
         findViewById(R.id.joinBtn).setVisibility(View.GONE); // set the join button hidden
         findViewById(R.id.audioBtn).setVisibility(View.VISIBLE); // set the audio button hidden
@@ -192,7 +211,11 @@ public class VideoActivity extends AppCompatActivity {
     }
 
     private void leaveChannel() {
-        mRtcEngine.leaveChannel();
+        try{
+            mRtcEngine.leaveChannel();}
+        catch(NullPointerException ignored){
+
+        }
     }
 
     private void removeVideo(int containerID) {
